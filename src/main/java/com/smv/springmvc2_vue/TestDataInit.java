@@ -1,7 +1,7 @@
-package hello.itemservice;
+package com.smv.springmvc2_vue;
 
-import hello.itemservice.domain.item.Item;
-import hello.itemservice.domain.item.ItemRepository;
+import com.smv.springmvc2_vue.item.Item;
+import com.smv.springmvc2_vue.item.ItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

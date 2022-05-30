@@ -1,4 +1,4 @@
-package hello.itemservice.domain.item;
+package com.smv.springmvc2_vue.item;
 
 import org.springframework.stereotype.Repository;
 
