@@ -11,6 +11,11 @@ const routes = [
         name: "ItemList",
         component: () => import("@/views/ItemList.vue"),
     },
+    {
+        path: "/add/item",
+        name: "ItemAdd",
+        component: () => import("@/views/ItemAdd.vue"),
+    },
 ];
 
 const router = createRouter({
