@@ -8,7 +8,9 @@
 
 </script>
 
-<style scoped>
+<style lang="scss">
+@import "./assets/styles/main.scss";
+
   .main {
     display: flex;
     justify-content: center;

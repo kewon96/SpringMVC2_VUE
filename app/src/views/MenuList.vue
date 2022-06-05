@@ -3,7 +3,7 @@
     <li>상품 관리
       <ul>
         <li>
-          <router-link to="/form/items">상품 관리 - 폼(form)</router-link>
+          <router-link to="/item/home">상품 관리 - 폼(form)</router-link>
         </li>
       </ul>
     </li>
