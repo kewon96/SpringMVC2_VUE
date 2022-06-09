@@ -12,25 +12,12 @@
       <div>가격</div>
       <div>수량</div>
     </section>
-    <section class="table-data" v-for="item in items">
-      <router-link to="/item/info">{{ item.id }}</router-link>
+    <section class="table-data" v-for="item in items" @click="goItemDetail(item.id)">
+      <div>{{ item.id }}</div>
       <div>{{ item.itemName }}</div>
       <div>{{ item.price }}</div>
       <div>{{ item.quantity }}</div>
     </section>
-
-<!--    <section class="table-data">
-      <router-link to="/item/info">1</router-link>
-      <div>itemA</div>
-      <div>30000</div>
-      <div>40</div>
-    </section>
-    <section class="table-data">
-      <router-link to="/item/info">2</router-link>
-      <div>itemA</div>
-      <div>70000</div>
-      <div>80</div>
-    </section>-->
   </article>
 </template>
 
@@ -38,18 +25,15 @@
 
 import {onMounted, reactive} from "vue";
 import {http} from "@/core";
+import {useRoute, useRouter} from "vue-router";
+import {Item, ItemRouteLocationRaw, ItemRouteParams} from "@/views/item/type";
 
 
 /******** Type & Interface **********/
-interface Item {
-  id: string
-  itemName: string
-  price: number
-  quantity: number
-}
+
 
 /******** Instance **********/
-
+const router = useRouter();
 
 /******** Reactive Instance **********/
 const items = reactive<Array<Item>>([]);
@@ -60,8 +44,17 @@ onMounted(fetchItems)
 
 /******** Functions **********/
 async function fetchItems() {
-  const {data} = await http.post('/item/list');
+  const {data} = await http.get('/item/list');
   Object.assign(items, data)
+}
+
+function goItemDetail(id: string) {
+  router.push({
+    name: 'ItemInfo',
+    params: {
+      id
+    },
+  } as ItemRouteLocationRaw)
 }
 
 

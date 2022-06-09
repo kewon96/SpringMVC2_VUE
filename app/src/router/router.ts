@@ -28,7 +28,7 @@ const routes = [
             },
             {
                 name: 'ItemInfo',
-                path: '/item/info',
+                path: '/item/:id',
                 component: () => import("@/views/item/ItemComponent.vue"),
             }
         ]

@@ -16,24 +16,14 @@ public class FormItemController {
 
     private final ItemRepository itemRepository;
 
-//    @GetMapping
-//    public String items(Model model) {
-//        List<Item> items = itemRepository.findAll();
-//        model.addAttribute("items", items);
-//        return "form/items";
-//    }
-
-    @PostMapping("/list")
+    @GetMapping("/list")
     public List<Item> items() {
-        List<Item> all = itemRepository.findAll();
-        return all;
+        return itemRepository.findAll();
     }
 
     @GetMapping("/{itemId}")
-    public String item(@PathVariable long itemId, Model model) {
-        Item item = itemRepository.findById(itemId);
-        model.addAttribute("item", item);
-        return "form/item";
+    public Item item(@PathVariable long itemId) {
+        return itemRepository.findById(itemId);
     }
 
     @GetMapping("/add")
