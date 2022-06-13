@@ -14,7 +14,7 @@
     </section>
     <section class="table-data" v-for="item in items" @click="goItemDetail(item.id)">
       <div>{{ item.id }}</div>
-      <div>{{ item.itemName }}</div>
+      <div>{{ item.name }}</div>
       <div>{{ item.price }}</div>
       <div>{{ item.quantity }}</div>
     </section>
@@ -25,15 +25,15 @@
 
 import {onMounted, reactive} from "vue";
 import {http} from "@/core";
-import {useRoute, useRouter} from "vue-router";
-import {Item, ItemRouteLocationRaw, ItemRouteParams} from "@/views/item/type";
+import {Router, useRouter} from "vue-router";
+import {Item, ItemRouteLocationRaw} from "@/views/item/type";
 
 
 /******** Type & Interface **********/
 
 
 /******** Instance **********/
-const router = useRouter();
+const router: Router = useRouter();
 
 /******** Reactive Instance **********/
 const items = reactive<Array<Item>>([]);

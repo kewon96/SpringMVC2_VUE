@@ -1,10 +1,10 @@
 import {RouteLocationRaw, RouteParamsRaw} from "vue-router";
 
 export interface Item {
-    id: string
-    itemName: string
-    price: number
-    quantity: number
+    id?: string
+    name?: string
+    price?: number
+    quantity?: number
 }
 
 export type ItemRouteParams = {
