@@ -23,9 +23,9 @@
 
 <script setup lang="ts">
 
-import {onMounted, reactive} from "vue";
+import {onMounted, reactive, watchEffect} from "vue";
 import {http} from "@/core";
-import {Router, useRouter} from "vue-router";
+import {onBeforeRouteUpdate, Router, useRouter} from "vue-router";
 import {Item, ItemRouteLocationRaw} from "@/views/item/type";
 
 
@@ -39,8 +39,13 @@ const router: Router = useRouter();
 const items = reactive<Array<Item>>([]);
 
 /******** Hooks **********/
-onMounted(fetchItems)
-
+watchEffect(fetchItems)
+// onBeforeRouteUpdate((to, from, next) => {
+//   debugger
+//   console.log(to)
+//   console.log(from)
+//   console.log(next)
+// })
 
 /******** Functions **********/
 async function fetchItems() {
