@@ -1,6 +1,6 @@
 <template>
   <nav class="header-button-area">
-    <router-link to="/item/add">상품 등록</router-link>
+    <MoveButton to="/item/add">상품 등록</MoveButton>
   </nav>
 
   <hr>
@@ -23,10 +23,11 @@
 
 <script setup lang="ts">
 
-import {onMounted, reactive, watchEffect} from "vue";
+import {onMounted, reactive} from "vue";
 import {http} from "@/core";
-import {onBeforeRouteUpdate, Router, useRouter} from "vue-router";
-import {Item, ItemRouteLocationRaw} from "@/views/item/type";
+import {Router, useRouter} from "vue-router";
+import {Item} from "@/views/item/type";
+import MoveButton from "@/core/components/button/MoveButton.vue";
 
 
 /******** Type & Interface **********/
@@ -36,30 +37,19 @@ import {Item, ItemRouteLocationRaw} from "@/views/item/type";
 const router: Router = useRouter();
 
 /******** Reactive Instance **********/
-const items = reactive<Array<Item>>([]);
+const items = reactive<Item[]>([]);
 
 /******** Hooks **********/
-watchEffect(fetchItems)
-// onBeforeRouteUpdate((to, from, next) => {
-//   debugger
-//   console.log(to)
-//   console.log(from)
-//   console.log(next)
-// })
+onMounted(fetchItems)
 
 /******** Functions **********/
 async function fetchItems() {
   const {data} = await http.get('/item/list');
-  Object.assign(items, data)
+  Object.assign(items, [...data])
 }
 
 function goItemDetail(id: string) {
-  router.push({
-    name: 'ItemInfo',
-    params: {
-      id
-    },
-  } as ItemRouteLocationRaw)
+  router.push(`/item/${id}`)
 }
 
 

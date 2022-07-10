@@ -1,6 +1,6 @@
-import { createWebHistory, createRouter } from "vue-router";
+import {createWebHistory, createRouter, RouteRecordRaw} from "vue-router";
 
-const routes = [
+const routes: RouteRecordRaw[] = [
     {
         name: "MenuList",
         path: "/",
@@ -30,6 +30,11 @@ const routes = [
                 name: 'ItemInfo',
                 path: '/item/:id',
                 component: () => import("@/views/item/ItemComponent.vue"),
+            },
+            {
+                name: 'ItemCancel',
+                path: '/item/cancel',
+                redirect: 'home'
             }
         ]
     },

@@ -13,7 +13,7 @@ public class Item {
     private Integer quantity;
     
     /** 판매여부 */
-    private boolean open;
+    private Boolean open;
 
     /** 등록 지역 */
     private List<String> regions;
