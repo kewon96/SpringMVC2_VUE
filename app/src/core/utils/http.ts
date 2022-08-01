@@ -84,7 +84,7 @@ _axios.interceptors.response.use(
  */
 async function get(url: string, data?: any, config?: AxiosRequestConfig) {
   const plainData = toRaw(unref(data)) || {}
-  if (plainData) {
+  if (plainData && data) {
     url += '?' + Object.keys(plainData).map(function (k) {
       return encodeURIComponent(k) + '=' + encodeURIComponent(plainData[k])
     }).join('&')

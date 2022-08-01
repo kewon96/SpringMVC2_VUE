@@ -44,7 +44,10 @@ onMounted(fetchItems)
 
 /******** Functions **********/
 async function fetchItems() {
-  const {data} = await http.get('/item/list');
+  const response = await http.get('/item/list');
+  const {data} = response
+
+  console.log(response)
   Object.assign(items, [...data])
 }
 

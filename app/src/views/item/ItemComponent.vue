@@ -33,6 +33,23 @@
       </article>
     </section>
 
+    <section>
+      <label>등록 지역</label>
+      <MultiCombo v-model="item.regions" :disabled="canEdit()" />
+    </section>
+
+    <section>
+      <label>상품 종류</label>
+      <RadioButton v-model="item.itemType" :disabled="canEdit()" />
+    </section>
+
+    <section>
+      <label>배송 방식</label>
+      <SelectBox v-model="item.deliveryCode" :disabled="canEdit()" />
+    </section>
+
+    <hr>
+
     <footer class="btn-area">
       <div>
         <MoveButton to="/item/edit" v-if="route.name === 'ItemInfo'">상품 수정</MoveButton>
@@ -55,10 +72,12 @@ import {
 } from "vue-router";
 import {onMounted, reactive} from "vue";
 import {http} from "@/core";
-import {Item, ItemRouteParams} from "@/views/item/type";
+import {DeliveryCode, Item, ItemRouteParams, ItemType, Region} from "@/views/item/type";
 import MoveButton from "@/core/components/button/MoveButton.vue";
 import CancelButton from "@/core/components/button/CancelButton.vue";
-
+import MultiCombo from "@/views/item/sub/MultiCombo.vue";
+import RadioButton from "@/views/item/sub/RadioButton.vue";
+import SelectBox from "@/views/item/sub/SelectBox.vue";
 
 /******** Type & Interface **********/
 type ItemRoute = { name: string, params: ItemRouteParams } | RouteLocationNormalizedLoaded
@@ -69,7 +88,7 @@ const router: Router = useRouter();
 
 /******** Reactive Instance **********/
 const item = reactive<Item>({
-  open: false
+  open: false,
 })
 
 /******** Hooks **********/
@@ -79,16 +98,15 @@ onMounted(initLoad)
 /******** Functions **********/
 
 function initLoad() {
-  const { name } = route;
+  const { name, params } = route;
 
   // "상세보기"면 아이템조회
-  if(name === 'ItemInfo') fetchItem(item.id as string)
+  if(name === 'ItemInfo') fetchItem(params as { id: string })
 }
 
 /** 아이디를 가지고 상품조회 */
-async function fetchItem(id: string) {
+async function fetchItem({id}: { id: string; }) {
   const {data} = await http.get(`/item/${id}`);
-
   Object.assign(item, data)
 }
 
@@ -126,14 +144,6 @@ async function editItem(): Promise<string> {
   const {data} = await http.post('/item/edit', item)
 
   return data
-}
-
-function goBack() {
-  router.back();
-}
-
-function test() {
-  console.log(123)
 }
 
 

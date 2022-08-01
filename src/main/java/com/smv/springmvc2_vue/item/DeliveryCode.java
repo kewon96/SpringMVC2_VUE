@@ -1,9 +1,11 @@
 package com.smv.springmvc2_vue.item;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter @Setter
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor
 public class DeliveryCode {
     
     /** 시스템에서 전달하는 값 */

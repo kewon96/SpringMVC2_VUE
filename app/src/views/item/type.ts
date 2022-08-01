@@ -1,9 +1,19 @@
 import {RouteLocationRaw, RouteParamsRaw} from "vue-router";
 
-enum ItemType {
+export enum ItemType {
     BOOK = '도서',
     FOOD = '식품',
     ETC = '기타',
+}
+
+export interface Region {
+    type?: string
+    name?: string
+}
+
+export interface DeliveryCode {
+    code: string
+    displayName: string
 }
 
 export interface Item {

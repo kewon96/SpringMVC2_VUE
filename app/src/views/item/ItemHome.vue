@@ -8,7 +8,6 @@
       <router-view />
     </section>
 
-
   </main>
 </template>
 
