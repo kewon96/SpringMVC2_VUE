@@ -3,9 +3,9 @@
     <label v-for="item in itemTypes">
       <input type="radio"
              name="regions"
-             v-model="props.modelValue"
-             :disabled="props.disabled"
-             @input="updateValue"
+             v-model="modelValue"
+             :disabled="disabled"
+             @change="updateValue"
              :value="item"
               />
       {{ ItemType[item] }}
@@ -14,7 +14,7 @@
 </template>
 
 <script setup lang="ts">
-import {onMounted, reactive} from "vue";
+import {onMounted, reactive, ref} from "vue";
 import {http} from "@/core";
 import {ItemType} from "@/views/item/type";
 
@@ -30,7 +30,7 @@ const props = defineProps<{
   disabled: boolean
 }>()
 const emits = defineEmits<{
-  ( e: 'update:modelValue' ): void
+  ( e: 'update:modelValue', value: ItemType ): void
 }>()
 const itemTypes = reactive<ItemType[]>([])
 
@@ -43,8 +43,8 @@ async function fetchItemTypes(): Promise<void> {
   Object.assign(itemTypes, data)
 }
 
-function updateValue(event: Event) {
-  emits('update:modelValue')
+function updateValue() {
+  emits('update:modelValue', props.modelValue)
 }
 
 </script>

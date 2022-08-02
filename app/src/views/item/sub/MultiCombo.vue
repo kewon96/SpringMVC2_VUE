@@ -3,8 +3,8 @@
     <div class="form-check" v-for="region in Object.entries(regions)">
       <label>
         <input type="checkbox"
-               :disabled="props.disabled"
-               @update:checked="updateValue($event)"
+               :disabled="disabled"
+               @change="updateValue($event)"
                :value="region[0]">
         {{ region[1] }}
       </label>
@@ -35,13 +35,17 @@ const regions = reactive<Region>({})
 const choiceRegion = ref<string[]>([])
 
 /******** Hooks **********/
-onMounted(fetchRegions)
+onMounted(() => {
+  fetchRegions()
+})
 watchEffect(() => choiceRegion.value = props.modelValue ?? [])
 
 /******** Functions **********/
 async function fetchRegions(): Promise<void> {
   const { data } = await http.get("/item/get/regions")
   Object.assign(regions, data)
+
+  if(props.modelValue) init()
 }
 
 function updateValue(event: Event) {
@@ -56,10 +60,14 @@ function updateValue(event: Event) {
   }
 
   emits("update:modelValue", choiceRegion.value);
+}
 
+function init() {
+  const { modelValue } = props
 
-  // emits('update:checked', (eventTarget as HTMLInputElement).value! as string)
-  // emits('update:modelValue')
+  Object.values(modelValue).forEach(x => {
+
+  })
 }
 
 </script>
