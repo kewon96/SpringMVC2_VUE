@@ -29,7 +29,7 @@ import {http} from "@/core";
 /******** Reactive Instance **********/
 const props = defineProps<{
   disabled: boolean
-  modelValue: string
+  modelValue?: string
 }>()
 
 const emits = defineEmits<{

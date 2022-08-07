@@ -1,9 +1,10 @@
 <template>
   <article>
-    <div class="form-check" v-for="region in Object.entries(regions)">
+    <div class="form-check" v-for="region in Object.entries(regions)" >
       <label>
         <input type="checkbox"
                :disabled="disabled"
+               :checked="checked(region[0])"
                @change="updateValue($event)"
                :value="region[0]">
         {{ region[1] }}
@@ -25,7 +26,7 @@ import {http} from "@/core";
 
 /******** Reactive Instance **********/
 const props = defineProps<{
-  modelValue: Array<string>
+  modelValue?: Array<string>
   disabled: boolean
 }>()
 const emits = defineEmits<{
@@ -44,8 +45,6 @@ watchEffect(() => choiceRegion.value = props.modelValue ?? [])
 async function fetchRegions(): Promise<void> {
   const { data } = await http.get("/item/get/regions")
   Object.assign(regions, data)
-
-  if(props.modelValue) init()
 }
 
 function updateValue(event: Event) {
@@ -62,12 +61,12 @@ function updateValue(event: Event) {
   emits("update:modelValue", choiceRegion.value);
 }
 
-function init() {
-  const { modelValue } = props
+function checked(value: string) {
+  if(props.modelValue && props.modelValue.length !== 0) {
+    return props.modelValue.includes(value)
+  }
 
-  Object.values(modelValue).forEach(x => {
-
-  })
+  return false;
 }
 
 </script>
