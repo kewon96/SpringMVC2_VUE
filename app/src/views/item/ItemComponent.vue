@@ -52,8 +52,8 @@
 
     <footer class="btn-area">
       <div>
-        <MoveButton to="/item/edit" v-if="route.name === 'ItemInfo'">상품 수정</MoveButton>
-        <MoveButton :to="`/item/${item.id}`" v-else @click.prevent="saveItem">저장</MoveButton>
+        <MoveButton :path="'/item/edit'" v-if="route.name === 'ItemInfo'">상품 수정</MoveButton>
+        <MoveButton :path="`/item/${item.id}`" v-else @click.native.capture="saveItem">저장</MoveButton>
       </div>
       <div>
         <CancelButton to="/item/home">목록으로</CancelButton>
@@ -121,7 +121,7 @@ function canEdit() {
   return name === 'ItemInfo';
 }
 
-async function saveItem() {
+async function saveItem(event: Event) {
   const { name } = route;
 
   switch (name) {
@@ -129,6 +129,8 @@ async function saveItem() {
     case 'ItemEdit': item.id = await editItem(); break;
     default: break;
   }
+
+  if(!item.id) { event.stopPropagation() }
 
   await router.push(`/item/${item.id}`)
 }

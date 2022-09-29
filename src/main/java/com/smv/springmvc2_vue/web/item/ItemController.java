@@ -1,12 +1,16 @@
-package com.smv.springmvc2_vue.web.form;
+package com.smv.springmvc2_vue.web.item;
 
-import com.smv.springmvc2_vue.item.DeliveryCode;
-import com.smv.springmvc2_vue.item.Item;
-import com.smv.springmvc2_vue.item.ItemRepository;
-import com.smv.springmvc2_vue.item.ItemType;
+import com.smv.springmvc2_vue.domain.item.DeliveryCode;
+import com.smv.springmvc2_vue.domain.item.Item;
+import com.smv.springmvc2_vue.domain.item.ItemRepository;
+import com.smv.springmvc2_vue.domain.item.ItemType;
+import com.smv.springmvc2_vue.web.item.model.ItemAddDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.ValidationException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -15,7 +19,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/item")
 @RequiredArgsConstructor
-public class FormItemController {
+public class ItemController {
 
     private final ItemRepository itemRepository;
 
@@ -30,22 +34,30 @@ public class FormItemController {
     }
 
     @PostMapping("/add")
-    public Long addItem(@RequestBody Item item) {
-        Item savedItem = itemRepository.save(item);
+    public Long addItem(@RequestBody @Validated ItemAddDto dto, BindingResult bindingResult) {
+        if(bindingResult.hasErrors()) {
+            throw new ValidationException(bindingResult.getAllErrors().get(0).getDefaultMessage());
+        }
+
+        Item savedItem = itemRepository.save(dto.createItem());
 
         return savedItem.getId();
     }
 
     @PostMapping("/edit")
-    public Long editItem(@RequestBody Item item) {
+    public Long editItem(@RequestBody @Validated Item item, BindingResult bindingResult) {
+        if(bindingResult.hasErrors()) {
+            throw new ValidationException(bindingResult.getAllErrors().get(0).getDefaultMessage());
+        }
+
         return itemRepository.update(item).getId();
     }
 
     @GetMapping("/get/regions")
     public Map<String, Object> regions() {
         Map<String, Object> regions = new LinkedHashMap<>();
-        regions.put("SEOUL", "서울");
-        regions.put("BUSAN", "부산");
+        regions.put("SEOUL", "서울 및 경기도");
+        regions.put("BUSAN", "부산, 대전 등 광역시");
         regions.put("JEJU", "제주");
 
         return regions;

@@ -64,7 +64,9 @@ _axios.interceptors.response.use(
       }
 
       // here you could check expired token and refresh it if necessary
-      throw new _axios.Cancel(error.response.data?.message);
+      // throw new _axios.Cancel(error.response.data?.message);
+      throw new _axios.Cancel('test');
+      // return Promise.reject(error)
     }
 );
 
