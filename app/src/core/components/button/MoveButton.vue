@@ -1,9 +1,9 @@
 <template>
-  <button>
-    <router-link :to="path" :disabled="true">
+  <div>
+    <router-link :to="to" :class="{ disabled: disabledHandler() }">
       <slot></slot>
     </router-link>
-  </button>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -18,25 +18,25 @@ const vm = getCurrentInstance()
 console.log(vm?.attrs)
 
 /******** Reactive Instance **********/
+
 const props = defineProps<{
-  path: string
+  to: string
+  disabledFn?: Function
 }>()
+
 
 /******** Hooks **********/
 
 
 /******** Functions **********/
 
+function disabledHandler() {
+  return props.disabledFn ? props.disabledFn() : false;
+}
 
 </script>
 
 <style scoped lang="scss">
-
-button {
-  width: inherit;
-  background: none;
-  border: none;
-}
 
 a {
   font-weight: 400;
@@ -45,9 +45,10 @@ a {
   border-radius: 0.25rem;
   color: #fff;
   text-decoration: none;
-  
-  :disabled {
-    background: #ccc;
+
+  &.disabled {
+    opacity: 0.5;
+    pointer-events: none;
   }
 }
 
