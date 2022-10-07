@@ -30,6 +30,12 @@ const routes: RouteRecordRaw[] = [
                 name: 'ItemInfo',
                 path: '/item/:id',
                 component: () => import("@/views/item/ItemComponent.vue"),
+                beforeEnter(to, from, next) {
+                    // id값이 명확해야 이동가능
+                    if(Number(to.params.id)) {
+                        next()
+                    }
+                }
             },
             {
                 name: 'ItemCancel',

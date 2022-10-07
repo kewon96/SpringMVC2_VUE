@@ -129,8 +129,6 @@ async function saveItem() {
     case 'ItemEdit': item.id = await editItem(); break;
     default: break;
   }
-
-  await router.push(`/item/${item.id}`)
 }
 
 /** 상품 추가 */

@@ -1,7 +1,9 @@
 <template>
-  <router-link>
-    <slot></slot>
-  </router-link>
+  <div>
+    <router-link :to="to" :class="{ disabled: disabledHandler() }">
+      <slot></slot>
+    </router-link>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -17,12 +19,20 @@ console.log(vm?.attrs)
 
 /******** Reactive Instance **********/
 
+const props = defineProps<{
+  to: string
+  disabledFn?: Function
+}>()
+
 
 /******** Hooks **********/
 
 
 /******** Functions **********/
 
+function disabledHandler() {
+  return props.disabledFn ? props.disabledFn() : false;
+}
 
 </script>
 
@@ -35,6 +45,11 @@ a {
   border-radius: 0.25rem;
   color: #fff;
   text-decoration: none;
+
+  &.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
 }
 
 </style>
