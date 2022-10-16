@@ -117,7 +117,8 @@ async function post(url: string, data?: any, config?: AxiosRequestConfig) {
  * @param url `string` 요청할 url 경로
  * @param data ? `any` 요청할 데이터
  * @param config ? `AxiosRequestConfig`
- * 
+ * @param isGetMethod 해당요청이 get방식인지
+ *
  * @return Promise<AxiosResponse<T>>
  */
 async function response(url: string, data?: any, config?: AxiosRequestConfig, isGetMethod?: boolean) {
