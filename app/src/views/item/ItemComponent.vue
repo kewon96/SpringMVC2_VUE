@@ -52,8 +52,7 @@
 
     <footer class="btn-area">
       <div>
-        <MoveButton to="/item/edit" v-if="route.name === 'ItemInfo'">상품 수정</MoveButton>
-        <MoveButton :to="`/item/${item.id}`" v-else @click.prevent="saveItem">저장</MoveButton>
+        <MoveButton :to="`/item/${item.id}`" @click.prevent="saveItem">저장</MoveButton>
       </div>
       <div>
         <CancelButton to="/item/home">목록으로</CancelButton>
@@ -85,6 +84,7 @@ type ItemRoute = { name: string, params: ItemRouteParams } | RouteLocationNormal
 /******** Instance **********/
 const route: ItemRoute = useRoute();
 const router: Router = useRouter();
+const { post, get } = http;
 
 /******** Reactive Instance **********/
 const item = reactive<Item>({
@@ -101,13 +101,12 @@ function initLoad() {
   const { name, params } = route;
 
   // "상세보기"면 아이템조회
-  if(name === 'ItemInfo') fetchItem(params as { id: string })
+  name === 'ItemInfo' && fetchGetItem(params as { id: string }).then(({ data })=> { Object.assign(item, data) })
 }
 
 /** 아이디를 가지고 상품조회 */
-async function fetchItem({id}: { id: string; }) {
-  const {data} = await http.get(`/item/${id}`);
-  Object.assign(item, data)
+function fetchGetItem({id}: { id: string; }) {
+  return get(`item/${id}`)
 }
 
 /**
@@ -121,27 +120,17 @@ function canEdit() {
   return name === 'ItemInfo';
 }
 
-async function saveItem() {
+/** 저장버튼 클릭 이벤트 */
+function saveItem() {
   const { name } = route;
+  const type = name === 'ItemAdd' ? 'add' : 'edit';
 
-  switch (name) {
-    case 'ItemAdd' : item.id = await addItem(); break;
-    case 'ItemEdit': item.id = await editItem(); break;
-    default: break;
-  }
+  fetchControlItem(type).then(({ data })=> item.id = data);
 }
 
-/** 상품 추가 */
-async function addItem(): Promise<string> {
-  const {data} = await http.post('/item/add', item)
-
-  return data
-}
-
-async function editItem(): Promise<string> {
-  const {data} = await http.post('/item/edit', item)
-
-  return data
+/** 데이터 조작관련 통신 */
+function fetchControlItem(type: string) {
+  return post(`/item/${type}`, item)
 }
 
 

@@ -32,7 +32,7 @@ const routes: RouteRecordRaw[] = [
                 component: () => import("@/views/item/ItemComponent.vue"),
                 beforeEnter(to, from, next) {
                     // id값이 명확해야 이동가능
-                    if(Number(to.params.id)) {
+                    if(+to.params.id) {
                         next()
                     }
                 }
