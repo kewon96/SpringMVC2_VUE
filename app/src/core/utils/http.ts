@@ -50,6 +50,8 @@ _axios.interceptors.response.use(
       return response;
     },
     (error) => {
+
+      console.log(error)
       const { config } = error;
       const originalRequest = config;
 

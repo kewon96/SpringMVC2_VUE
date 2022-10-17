@@ -52,10 +52,10 @@
 
     <footer class="btn-area">
       <div>
-        <MoveButton :to="`/item/${item.id}`" @click.prevent="saveItem">저장</MoveButton>
+        <MoveButton :to="`/item/${item.id}`" @click.prevent="saveItem">{{ canEdit() ? '수정하기' : '저장' }}</MoveButton>
       </div>
       <div>
-        <CancelButton to="/item/home">목록으로</CancelButton>
+        <CancelButton :to="'/item/home'">목록으로</CancelButton>
       </div>
     </footer>
   </article>

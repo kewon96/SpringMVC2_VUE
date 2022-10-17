@@ -7,15 +7,11 @@
 </template>
 
 <script setup lang="ts">
-import {getCurrentInstance} from "vue";
-
-
 /******** Type & Interface **********/
 
 
 /******** Instance **********/
-const vm = getCurrentInstance()
-console.log(vm?.attrs)
+
 
 /******** Reactive Instance **********/
 
