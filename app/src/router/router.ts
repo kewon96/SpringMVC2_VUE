@@ -23,24 +23,22 @@ const routes: RouteRecordRaw[] = [
             },
             {
                 name: 'ItemEdit',
-                path: '/item/edit',
+                path: '/item/edit/:id',
                 component: () => import("@/views/item/ItemComponent.vue"),
+
             },
             {
                 name: 'ItemInfo',
                 path: '/item/:id',
                 component: () => import("@/views/item/ItemComponent.vue"),
-                beforeEnter(to, from, next) {
-                    // id값이 명확해야 이동가능
-                    if(+to.params.id) {
-                        next()
-                    }
-                }
             },
             {
                 name: 'ItemCancel',
                 path: '/item/cancel',
-                redirect: 'home'
+                redirect: 'home',
+                beforeEnter() {
+                    console.log(1)
+                }
             }
         ]
     },

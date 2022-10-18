@@ -51,18 +51,16 @@
     <hr>
 
     <footer class="btn-area">
-      <div>
-        <MoveButton :to="`/item/${item.id}`" @click.prevent="saveItem">{{ canEdit() ? '수정하기' : '저장' }}</MoveButton>
-      </div>
-      <div>
-        <CancelButton :to="'/item/home'">목록으로</CancelButton>
-      </div>
+      <MoveButton :to="`/item/edit/${item.id}`" v-if="canEdit()">수정하기</MoveButton> <!-- Item 수정페이지 이동 -->
+      <MoveButton :to="`/item/${item.id}`" @click.prevent="saveItem" v-else>저장</MoveButton> <!-- Item추가 및 수정 -->
+      <CancelButton to="/item/home">목록으로</CancelButton>
     </footer>
   </article>
 </template>
 
 <script setup lang="ts">
 import {
+  onBeforeRouteLeave,
   onBeforeRouteUpdate,
   RouteLocationNormalizedLoaded,
   Router,
@@ -71,7 +69,7 @@ import {
 } from "vue-router";
 import {onMounted, reactive} from "vue";
 import {http} from "@/core";
-import {DeliveryCode, Item, ItemRouteParams, ItemType, Region} from "@/views/item/type";
+import {Item, ItemRouteParams} from "@/views/item/type";
 import MoveButton from "@/core/components/button/MoveButton.vue";
 import CancelButton from "@/core/components/button/CancelButton.vue";
 import MultiCombo from "@/views/item/sub/MultiCombo.vue";
@@ -85,11 +83,10 @@ type ItemRoute = { name: string, params: ItemRouteParams } | RouteLocationNormal
 const route: ItemRoute = useRoute();
 const router: Router = useRouter();
 const { post, get } = http;
+const initItem = { open: false }
 
 /******** Reactive Instance **********/
-const item = reactive<Item>({
-  open: false,
-})
+const item = reactive<Item>(initItem)
 
 /******** Hooks **********/
 onBeforeRouteUpdate(initLoad)
@@ -100,12 +97,12 @@ onMounted(initLoad)
 function initLoad() {
   const { name, params } = route;
 
-  // "상세보기"면 아이템조회
-  name === 'ItemInfo' && fetchGetItem(params as { id: string }).then(({ data })=> { Object.assign(item, data) })
+  // "상세보기"나 "수정"이면 아이템조회
+  name !== 'ItemAdd' && fetchGetItem(params.id as string).then(({ data })=> { Object.assign(item, data) })
 }
 
 /** 아이디를 가지고 상품조회 */
-function fetchGetItem({id}: { id: string; }) {
+function fetchGetItem(id: string) {
   return get(`item/${id}`)
 }
 
@@ -125,8 +122,27 @@ function saveItem() {
   const { name } = route;
   const type = name === 'ItemAdd' ? 'add' : 'edit';
 
-  fetchControlItem(type).then(({ data })=> item.id = data);
+  fetchControlItem(type)
+      .then(({ data })=> item.id = data )
+      // .catch(() => { router. })
+      // .finally(() => { item.id = route.params.id as string })
 }
+
+onBeforeRouteLeave((to, from, next) => {
+  if(+to.params.id) {
+    next()
+  }
+})
+
+router.beforeEach((to, from, next) => {
+  console.log(to, from, next)
+
+  next()
+})
+
+// onBeforeRouteUpdate((to, from) => {
+//   console.log(to, from)
+// })
 
 /** 데이터 조작관련 통신 */
 function fetchControlItem(type: string) {

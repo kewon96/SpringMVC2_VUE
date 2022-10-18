@@ -1,5 +1,5 @@
 <template>
-  <router-link>
+  <router-link :to="to">
     <slot></slot>
   </router-link>
 </template>
@@ -13,7 +13,9 @@
 
 
 /******** Reactive Instance **********/
-
+defineProps<{
+  to: string
+}>()
 
 /******** Hooks **********/
 

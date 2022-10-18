@@ -16,7 +16,7 @@
 /******** Reactive Instance **********/
 
 const props = defineProps<{
-  to: string
+  to?: string
   disabledFn?: Function
 }>()
 

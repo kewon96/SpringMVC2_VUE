@@ -1,6 +1,5 @@
-package com.smv.springmvc2_vue.web.form;
+package com.smv.springmvc2_vue.web.item;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.smv.springmvc2_vue.domain.item.*;
 import com.smv.springmvc2_vue.web.form.dto.ItemAddDto;
 import com.smv.springmvc2_vue.web.form.dto.ItemEditDto;
@@ -18,7 +17,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/item")
 @RequiredArgsConstructor
-public class FormItemController {
+public class ItemController {
 
     private final ItemRepository itemRepository;
     private final ItemValidator itemValidator;

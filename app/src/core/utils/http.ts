@@ -65,6 +65,8 @@ _axios.interceptors.response.use(
         delete currentExecutingRequests[originalRequest.url];
       }
 
+      alert('문제가 발생했습니다.')
+
       // here you could check expired token and refresh it if necessary
       // throw new _axios.Cancel(error.response.data?.message);
       throw new _axios.Cancel('test');
