@@ -52,7 +52,8 @@
 
     <footer class="btn-area">
       <MoveButton :to="`/item/edit/${item.id}`" v-if="canEdit()">수정하기</MoveButton> <!-- Item 수정페이지 이동 -->
-      <MoveButton :to="`/item/${item.id}`" @click.prevent="saveItem" v-else>저장</MoveButton> <!-- Item추가 및 수정 -->
+      <MoveButton :to="`/item/${item.id}`" v-else>저장</MoveButton> <!-- Item추가 및 수정 -->
+
       <CancelButton to="/item/home">목록으로</CancelButton>
     </footer>
   </article>
@@ -89,8 +90,21 @@ const initItem = { open: false }
 const item = reactive<Item>(initItem)
 
 /******** Hooks **********/
+
 onBeforeRouteUpdate(initLoad)
 onMounted(initLoad)
+onBeforeRouteLeave((to, from, next) => {
+
+  const onfulfilled = ({ data }: {data: string}) => {
+    if(!data) return;
+
+    item.id = data;
+    next();
+  };
+
+  if(['ItemList', 'ItemEdit'].includes(to.name as string)) next();
+  else if( to.name === 'ItemInfo' ) saveItem().then(onfulfilled)
+})
 
 /******** Functions **********/
 
@@ -122,27 +136,8 @@ function saveItem() {
   const { name } = route;
   const type = name === 'ItemAdd' ? 'add' : 'edit';
 
-  fetchControlItem(type)
-      .then(({ data })=> item.id = data )
-      // .catch(() => { router. })
-      // .finally(() => { item.id = route.params.id as string })
+  return fetchControlItem(type)
 }
-
-onBeforeRouteLeave((to, from, next) => {
-  if(+to.params.id) {
-    next()
-  }
-})
-
-router.beforeEach((to, from, next) => {
-  console.log(to, from, next)
-
-  next()
-})
-
-// onBeforeRouteUpdate((to, from) => {
-//   console.log(to, from)
-// })
 
 /** 데이터 조작관련 통신 */
 function fetchControlItem(type: string) {

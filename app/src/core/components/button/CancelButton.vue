@@ -1,7 +1,9 @@
 <template>
-  <router-link :to="to">
-    <slot></slot>
-  </router-link>
+  <div>
+    <router-link :to="to">
+      <slot></slot>
+    </router-link>
+  </div>
 </template>
 
 <script setup lang="ts">
