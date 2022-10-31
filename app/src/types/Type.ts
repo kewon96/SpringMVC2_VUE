@@ -27,12 +27,9 @@ export interface Item {
     deliveryCode?: string
 }
 
-export type ItemRouteParams = {
-    id: string
-} | RouteParamsRaw
-
-export type ItemRouteLocationRaw = {
-    name: string,
-    params: ItemRouteParams
-} | RouteLocationRaw
-
+export enum VALID_RULES {
+    REQUIRED = 'REQUIRED',
+    SIZE = 'SIZE',
+    MAX = 'MAX',
+    MIN = 'MIN',
+}

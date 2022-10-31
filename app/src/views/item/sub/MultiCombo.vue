@@ -15,7 +15,7 @@
 
 <script setup lang="ts">
 import {onMounted, reactive, ref, watchEffect} from "vue";
-import {Region} from "@/views/item/type";
+import {Region} from "@/types/Type";
 import {http} from "@/core";
 
 /******** Type & Interface **********/

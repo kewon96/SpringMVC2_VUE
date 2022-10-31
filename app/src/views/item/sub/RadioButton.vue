@@ -16,7 +16,7 @@
 <script setup lang="ts">
 import {onMounted, reactive, ref} from "vue";
 import {http} from "@/core";
-import {ItemType} from "@/views/item/type";
+import {ItemType} from "@/types/Type";
 
 /******** Type & Interface **********/
 

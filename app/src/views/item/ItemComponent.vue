@@ -5,10 +5,18 @@
         <label>상품 ID</label>
         <input type="text" v-model="item.id" :disabled="true">
       </article>
-      <article class="input-area">
+      <ItemInput
+          v-model="item.id"
+          title="상품명"
+          placeholder="이름을 입력하세요"
+          role="REQUIRED"
+      />
+<!--      <article class="input-area">
         <label>상품명</label>
         <input type="text" v-model="item.name" :disabled="canEdit()" placeholder="이름을 입력하세요.">
-      </article>
+      </article>-->
+
+
       <article class="input-area">
         <label>가격</label>
         <input type="text" v-model="item.price" :disabled="canEdit()" placeholder="가격을 입력하세요.">
@@ -63,30 +71,36 @@
 import {
   onBeforeRouteLeave,
   onBeforeRouteUpdate,
-  RouteLocationNormalizedLoaded,
+  RouteLocationNormalizedLoaded, RouteParamsRaw,
   Router,
   useRoute,
   useRouter
-} from "vue-router";
-import {onMounted, reactive} from "vue";
-import {http} from "@/core";
-import {Item, ItemRouteParams} from "@/views/item/type";
-import MoveButton from "@/core/components/button/MoveButton.vue";
-import CancelButton from "@/core/components/button/CancelButton.vue";
-import MultiCombo from "@/views/item/sub/MultiCombo.vue";
-import RadioButton from "@/views/item/sub/RadioButton.vue";
-import SelectBox from "@/views/item/sub/SelectBox.vue";
+} from "vue-router"
+import {onMounted, reactive} from "vue"
+import {http} from "@/core"
+import MoveButton from "@/core/components/button/MoveButton.vue"
+import CancelButton from "@/core/components/button/CancelButton.vue"
+import MultiCombo from "@/views/item/sub/MultiCombo.vue"
+import RadioButton from "@/views/item/sub/RadioButton.vue"
+import SelectBox from "@/views/item/sub/SelectBox.vue"
+import {Item, VALID_RULES} from "@/types/Type"
 
 /******** Type & Interface **********/
+
+type ItemRouteParams = {
+  id: string
+} | RouteParamsRaw
 type ItemRoute = { name: string, params: ItemRouteParams } | RouteLocationNormalizedLoaded
 
 /******** Instance **********/
+
 const route: ItemRoute = useRoute();
 const router: Router = useRouter();
 const { post, get } = http;
 const initItem = { open: false }
 
 /******** Reactive Instance **********/
+
 const item = reactive<Item>(initItem)
 
 /******** Hooks **********/
@@ -94,7 +108,6 @@ const item = reactive<Item>(initItem)
 onBeforeRouteUpdate(initLoad)
 onMounted(initLoad)
 onBeforeRouteLeave((to, from, next) => {
-
   const onfulfilled = ({ data }: {data: string}) => {
     if(!data) return;
 
@@ -103,7 +116,7 @@ onBeforeRouteLeave((to, from, next) => {
   };
 
   if(['ItemList', 'ItemEdit'].includes(to.name as string)) next();
-  else if( to.name === 'ItemInfo' ) saveItem().then(onfulfilled)
+  else if( to.name === 'ItemInfo' ) saveItem().then(onfulfilled);
 })
 
 /******** Functions **********/
@@ -112,12 +125,12 @@ function initLoad() {
   const { name, params } = route;
 
   // "상세보기"나 "수정"이면 아이템조회
-  name !== 'ItemAdd' && fetchGetItem(params.id as string).then(({ data })=> { Object.assign(item, data) })
+  name !== 'ItemAdd' && fetchGetItem(params.id as string).then(({ data })=> { Object.assign(item, data) });
 }
 
 /** 아이디를 가지고 상품조회 */
 function fetchGetItem(id: string) {
-  return get(`item/${id}`)
+  return get(`item/${id}`);
 }
 
 /**
@@ -136,12 +149,12 @@ function saveItem() {
   const { name } = route;
   const type = name === 'ItemAdd' ? 'add' : 'edit';
 
-  return fetchControlItem(type)
+  return fetchControlItem(type);
 }
 
 /** 데이터 조작관련 통신 */
 function fetchControlItem(type: string) {
-  return post(`/item/${type}`, item)
+  return post(`/item/${type}`, item);
 }
 
 
