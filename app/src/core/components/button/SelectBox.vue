@@ -16,7 +16,6 @@
 
 <script setup lang="ts">
 import {onMounted, reactive} from "vue";
-import {DeliveryCode, ItemType} from "@/types/Type";
 import {http} from "@/core";
 
 

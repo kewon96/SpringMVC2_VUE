@@ -14,12 +14,16 @@
 </template>
 
 <script setup lang="ts">
-import {onMounted, reactive, ref} from "vue";
+import {onMounted, reactive} from "vue";
 import {http} from "@/core";
-import {ItemType} from "@/types/Type";
 
 /******** Type & Interface **********/
 
+enum ItemType {
+  BOOK = '도서',
+  FOOD = '식품',
+  ETC = '기타',
+}
 
 /******** Instance **********/
 

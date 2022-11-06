@@ -1,62 +1,47 @@
 <template>
   <article class="input-area">
     <label>{{ title }}</label>
-    <input type="text" :disabled="disabled" :placeholder="placeholder">
-    <p>{{ errMsg }}</p>
+    <input type="text" v-model="modelValue" :disabled="disabled" :placeholder="placeholder">
+    <ErrorMessage v-model="errMsg" />
   </article>
 </template>
 
-input<script setup lang="ts">
-import {VALID_RULES} from "@/types/Type";
-import {computed, ref} from "vue";
+<script setup lang="ts">
+import {ref, watch, watchEffect} from "vue";
 
 /******** Type & Interface **********/
 
 const props = withDefaults(defineProps<{
+  modelValue: string
   title: string
-  regExp?: RegExp           // 정규식
-  role?: string             // 정형화된 Validation
-  customFn?: () => string | boolean   // 별도의 Validation Fn (이때 반환은 에러메세지)
+  validFn?: (value: string) => string
   placeholder?: string
   disabled?: boolean
 }>(), {
   disabled: false
 })
 
+const emits = defineEmits<{
+  (e: 'update:modelValue', value: string): void
+}>()
+
 /******** Instance **********/
 
 
 /******** Reactive Instance **********/
 
-const errMsg = ref<string | true>()
+const errMsg = ref<string>('')
 
 /******** Hooks **********/
 
-computed(() => {
+watch(() => props.modelValue, (value) => {
+  if(props.validFn) errMsg.value = props.validFn(value)
 
-
-  if(props.role) {
-    errMsg.value = validRole()
-  }
-
-  if(!errMsg.value && props.regExp) {
-    errMsg.value = validRegExp()
-  }
-
-  if(!errMsg.value && props.customFn) {
-    errMsg.value = props.customFn()
-  }
+  emits('update:modelValue', value)
 })
 
 /******** Functions **********/
 
-function validRole(): string | boolean {
-
-}
-
-function validRegExp(): string | boolean {
-
-}
 
 </script>
 

@@ -6,10 +6,11 @@
         <input type="text" v-model="item.id" :disabled="true">
       </article>
       <ItemInput
-          v-model="item.id"
+          v-model="item.name"
           title="상품명"
-          placeholder="이름을 입력하세요"
-          role="REQUIRED"
+          placeholder="상품명을 입력하세요"
+          :validFn="useItemValid.validName"
+          :disabled="canEdit()"
       />
 <!--      <article class="input-area">
         <label>상품명</label>
@@ -78,12 +79,7 @@ import {
 } from "vue-router"
 import {onMounted, reactive} from "vue"
 import {http} from "@/core"
-import MoveButton from "@/core/components/button/MoveButton.vue"
-import CancelButton from "@/core/components/button/CancelButton.vue"
-import MultiCombo from "@/views/item/sub/MultiCombo.vue"
-import RadioButton from "@/views/item/sub/RadioButton.vue"
-import SelectBox from "@/views/item/sub/SelectBox.vue"
-import {Item, VALID_RULES} from "@/types/Type"
+import {useItemValid} from "@/views/item/useItemValid";
 
 /******** Type & Interface **********/
 
@@ -101,12 +97,12 @@ const initItem = { open: false }
 
 /******** Reactive Instance **********/
 
-const item = reactive<Item>(initItem)
+const item = reactive<Item>({...initItem})
 
 /******** Hooks **********/
 
 onBeforeRouteUpdate(initLoad)
-onMounted(initLoad)
+// onMounted(initLoad)
 onBeforeRouteLeave((to, from, next) => {
   const onfulfilled = ({ data }: {data: string}) => {
     if(!data) return;
