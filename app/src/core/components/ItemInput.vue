@@ -7,14 +7,15 @@
 </template>
 
 <script setup lang="ts">
-import {ref, watch, watchEffect} from "vue";
+import {nextTick, ref, watch} from "vue";
+import {ItemValid} from "@/views/item/ItemValid";
 
 /******** Type & Interface **********/
 
 const props = withDefaults(defineProps<{
   modelValue: string
   title: string
-  validFn?: (value: string) => string
+  validFn?: (value: string) => ItemValid
   placeholder?: string
   disabled?: boolean
 }>(), {
@@ -30,12 +31,16 @@ const emits = defineEmits<{
 
 /******** Reactive Instance **********/
 
-const errMsg = ref<string>('')
+const errMsg = ref<string>()
 
 /******** Hooks **********/
 
 watch(() => props.modelValue, (value) => {
-  if(props.validFn) errMsg.value = props.validFn(value)
+  console.log(value)
+
+  nextTick(() => {
+    if(props.validFn) errMsg.value = props.validFn(value).errMsg
+  })
 
   emits('update:modelValue', value)
 })

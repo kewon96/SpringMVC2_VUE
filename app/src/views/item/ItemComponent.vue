@@ -1,31 +1,28 @@
 <template>
   <article>
     <section>
-      <article class="input-area" v-if="route.name !== 'ItemAdd'">
-        <label>상품 ID</label>
-        <input type="text" v-model="item.id" :disabled="true">
-      </article>
+      <ItemInput title="상품ID" v-model="item.id" :disabled="true" v-if="route.name !== 'ItemAdd'" />
       <ItemInput
           v-model="item.name"
           title="상품명"
+          :disabled="canEdit()"
           placeholder="상품명을 입력하세요"
           :validFn="useItemValid.validName"
-          :disabled="canEdit()"
       />
-<!--      <article class="input-area">
-        <label>상품명</label>
-        <input type="text" v-model="item.name" :disabled="canEdit()" placeholder="이름을 입력하세요.">
-      </article>-->
-
-
-      <article class="input-area">
-        <label>가격</label>
-        <input type="text" v-model="item.price" :disabled="canEdit()" placeholder="가격을 입력하세요.">
-      </article>
-      <article class="input-area">
-        <label>수량</label>
-        <input type="text" v-model="item.quantity" :disabled="canEdit()" placeholder="수량을 입력하세요.">
-      </article>
+      <ItemInput
+          title="가격"
+          v-model="item.price"
+          :disabled="canEdit()"
+          placeholder="가격을 입력하세요."
+          :validFn="useItemValid.validPrice"
+      />
+      <ItemInput
+          title="수량"
+          v-model="item.quantity"
+          :disabled="canEdit()"
+          placeholder="수량을 입력하세요."
+          :validFn="useItemValid.validQuantity"
+      />
     </section>
 
     <hr>
