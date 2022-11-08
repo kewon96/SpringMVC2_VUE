@@ -2,20 +2,29 @@
   <article class="input-area">
     <label>{{ title }}</label>
     <input type="text" v-model="modelValue" :disabled="disabled" :placeholder="placeholder">
-    <ErrorMessage v-model="errMsg" />
+
+    <ErrorMessage v-model="errMsg" v-if="errMsg" />
   </article>
 </template>
 
 <script setup lang="ts">
 import {nextTick, ref, watch} from "vue";
-import {ItemValid} from "@/views/item/ItemValid";
+import {ItemValid} from "@/views/item/validator/ItemValid";
 
 /******** Type & Interface **********/
 
+// Item Value타입들
+type ItemValue = Item[keyof Item]
+
+/******** Instance **********/
+
+
+/******** Reactive Instance **********/
+
 const props = withDefaults(defineProps<{
-  modelValue: string
+  modelValue: ItemValue
   title: string
-  validFn?: (value: string) => ItemValid
+  validFn?: (value: ItemValue) => ItemValid
   placeholder?: string
   disabled?: boolean
 }>(), {
@@ -25,11 +34,6 @@ const props = withDefaults(defineProps<{
 const emits = defineEmits<{
   (e: 'update:modelValue', value: string): void
 }>()
-
-/******** Instance **********/
-
-
-/******** Reactive Instance **********/
 
 const errMsg = ref<string>()
 

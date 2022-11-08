@@ -1,4 +1,6 @@
 <template>
+  <label>{{ title }}</label>
+
   <article>
     <div class="form-check" v-for="region in Object.entries(regions)" >
       <label>
@@ -11,11 +13,13 @@
       </label>
     </div>
   </article>
+  <ErrorMessage v-model="errMsg" v-if="errMsg" />
 </template>
 
 <script setup lang="ts">
-import {onMounted, reactive, ref, watchEffect} from "vue";
+import {nextTick, onMounted, reactive, ref, watch, watchEffect} from "vue";
 import {http} from "@/core";
+import {ItemValid} from "@/views/item/validator/ItemValid";
 
 /******** Type & Interface **********/
 
@@ -24,20 +28,26 @@ import {http} from "@/core";
 
 
 /******** Reactive Instance **********/
+
 const props = defineProps<{
   modelValue?: Array<string>
+  title: string
   disabled: boolean
+  validFn?: (value?: Array<string>) => ItemValid
 }>()
 const emits = defineEmits<{
   ( e: 'update:modelValue', value: string[] ): void
 }>()
 const regions = reactive<Region>({})
 const choiceRegion = ref<string[]>([])
+const errMsg = ref<string>()
 
 /******** Hooks **********/
+
 onMounted(() => {
   fetchRegions()
 })
+
 watchEffect(() => choiceRegion.value = props.modelValue ?? [])
 
 /******** Functions **********/
@@ -56,6 +66,8 @@ function updateValue(event: Event) {
   } else {
     choiceRegion.value.splice(choiceRegion.value.indexOf(value), 1);
   }
+
+  if(props.validFn) errMsg.value = props.validFn(choiceRegion.value).errMsg
 
   emits("update:modelValue", choiceRegion.value);
 }

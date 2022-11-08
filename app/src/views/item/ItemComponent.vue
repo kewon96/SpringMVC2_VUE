@@ -23,35 +23,37 @@
           placeholder="수량을 입력하세요."
           :validFn="useItemValid.validQuantity"
       />
+      <NoteMessage modelValue="가격과 수량의 곱이 10,000은 넘어야합니다." />
     </section>
 
     <hr>
 
     <section>
-      <label>판매 여부</label>
-      <article>
-        <div class="form-check">
-          <label>
-            <input type="checkbox" v-model="item.open" :disabled="canEdit()">
-            판매 오픈
-          </label>
-        </div>
-      </article>
-    </section>
+      <ItemCheckBox
+          v-model="item.open"
+          title="판매 여부"
+          name="판매 오픈"
+          :disabled="canEdit()"
+      />
 
-    <section>
-      <label>등록 지역</label>
-      <MultiCombo v-model="item.regions" :disabled="canEdit()" />
-    </section>
-
-    <section>
-      <label>상품 종류</label>
-      <RadioButton v-model="item.itemType" :disabled="canEdit()" />
-    </section>
-
-    <section>
-      <label>배송 방식</label>
-      <SelectBox v-model="item.deliveryCode" :disabled="canEdit()" />
+      <MultiCheckBox
+          v-model="item.regions"
+          title="등록 지역"
+          :disabled="canEdit()"
+          :validFn="useItemValid.validRegions"
+      />
+      <RadioButton
+          v-model="item.itemType"
+          title="상품 종류"
+          :disabled="canEdit()"
+          :validFn="useItemValid.validType"
+      />
+      <SelectBox
+          v-model="item.deliveryCode"
+          title="배송 방식"
+          :disabled="canEdit()"
+          :validFn="useItemValid.validDeliveryCode"
+      />
     </section>
 
     <hr>
@@ -74,9 +76,11 @@ import {
   useRoute,
   useRouter
 } from "vue-router"
-import {onMounted, reactive} from "vue"
+import {reactive, watch} from "vue"
 import {http} from "@/core"
-import {useItemValid} from "@/views/item/useItemValid";
+import {useItemValid} from "@/views/item/validator/useItemValid";
+import {ItemValid} from "@/views/item/validator/ItemValid";
+import {useValidUtil} from "@/views/item/validator/useValidUtil";
 
 /******** Type & Interface **********/
 
@@ -96,6 +100,10 @@ const initItem = { open: false }
 
 const item = reactive<Item>({...initItem})
 
+/******** Normal Instance **********/
+
+const { setError, setSuccess } = useValidUtil
+
 /******** Hooks **********/
 
 onBeforeRouteUpdate(initLoad)
@@ -112,6 +120,8 @@ onBeforeRouteLeave((to, from, next) => {
   else if( to.name === 'ItemInfo' ) saveItem().then(onfulfilled);
 })
 
+
+
 /******** Functions **********/
 
 function initLoad() {
@@ -124,6 +134,10 @@ function initLoad() {
 /** 아이디를 가지고 상품조회 */
 function fetchGetItem(id: string) {
   return get(`item/${id}`);
+}
+
+const validPriceQuantity = (price: number, quantity: number): ItemValid => {
+  return price * quantity > 10000 ? setSuccess() : setError('가격과 수량의 곱이 10,000은 넘어야합니다.')
 }
 
 /**

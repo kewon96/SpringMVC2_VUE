@@ -1,4 +1,4 @@
-import {ItemValid} from "@/views/item/ItemValid";
+import {ItemValid} from "@/views/item/validator/ItemValid";
 
 const initItemValid = (): ItemValid => {
     return {

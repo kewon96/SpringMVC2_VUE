@@ -1,5 +1,6 @@
-import {ItemValid} from "@/views/item/ItemValid";
-import {useValidUtil} from "@/views/item/useValidUtil";
+import {ItemValid} from "@/views/item/validator/ItemValid";
+import {useValidUtil} from "@/views/item/validator/useValidUtil";
+import {ItemType} from "@/views/item/validator/ItemType";
 
 const { setError, setSuccess } = useValidUtil
 
@@ -24,6 +25,19 @@ export const useItemValid = {
         if(!quantity) return setError('가격을 입력하세요')
 
         return quantity > 1 ? setSuccess() : setError('수량은 최소 1개여야합니다.')
-    }
+    },
+
+    validRegions(regions?: Array<string>): ItemValid {
+        return regions && regions.length > 0 ?
+            setSuccess() : setError('등록지역을 선택해야합니다.')
+    },
+
+    validType(type?: ItemType): ItemValid {
+        return type ?  setSuccess() : setError('상품 종류를 선택해야합니다.')
+    },
+
+    validDeliveryCode(code?: string): ItemValid {
+        return code ?  setSuccess() : setError('배송방식을 선택해야합니다.')
+    },
 
 }
