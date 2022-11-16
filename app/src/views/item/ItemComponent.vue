@@ -7,21 +7,18 @@
           title="상품명"
           :disabled="canEdit()"
           placeholder="상품명을 입력하세요"
-          :validFn="useItemValid.validName"
       />
       <ItemInput
           title="가격"
           v-model="item.price"
           :disabled="canEdit()"
           placeholder="가격을 입력하세요."
-          :validFn="useItemValid.validPrice"
       />
       <ItemInput
           title="수량"
           v-model="item.quantity"
           :disabled="canEdit()"
           placeholder="수량을 입력하세요."
-          :validFn="useItemValid.validQuantity"
       />
       <NoteMessage modelValue="가격과 수량의 곱이 10,000은 넘어야합니다." />
     </section>
@@ -40,19 +37,16 @@
           v-model="item.regions"
           title="등록 지역"
           :disabled="canEdit()"
-          :validFn="useItemValid.validRegions"
       />
       <RadioButton
           v-model="item.itemType"
           title="상품 종류"
           :disabled="canEdit()"
-          :validFn="useItemValid.validType"
       />
       <SelectBox
           v-model="item.deliveryCode"
           title="배송 방식"
           :disabled="canEdit()"
-          :validFn="useItemValid.validDeliveryCode"
       />
     </section>
 
@@ -81,6 +75,7 @@ import {http} from "@/core"
 import {useItemValid} from "@/views/item/validator/useItemValid";
 import {ItemValid} from "@/views/item/validator/ItemValid";
 import {useValidUtil} from "@/views/item/validator/useValidUtil";
+import {useValid} from "@/views/item/validator/useValid";
 
 /******** Type & Interface **********/
 
@@ -95,6 +90,7 @@ const route: ItemRoute = useRoute();
 const router: Router = useRouter();
 const { post, get } = http;
 const initItem = { open: false }
+const itemValid = useValid(['name', 'price', 'quantity'])
 
 /******** Reactive Instance **********/
 

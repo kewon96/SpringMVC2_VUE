@@ -10,12 +10,12 @@
              :value="item"
               />
       {{ ItemType[item] }}
-    </label> <!-- @change="updateValue" -->
+    </label>
   </article>
 </template>
 
 <script setup lang="ts">
-import {nextTick, onMounted, reactive, ref, watch} from "vue";
+import {nextTick, onMounted, reactive, ref, watch, watchEffect} from "vue";
 import {http} from "@/core";
 import {ItemType} from "@/views/item/validator/ItemType";
 import {ItemValid} from "@/views/item/validator/ItemValid";
@@ -43,14 +43,9 @@ const errMsg = ref<string>()
 /******** Hooks **********/
 
 onMounted(fetchItemTypes)
-watch(() => props.modelValue, (value) => {
-  console.log(value)
+watchEffect(() => {
 
-  nextTick(() => {
-    if(props.validFn) errMsg.value = props.validFn(value).errMsg
-  })
-
-  emits('update:modelValue', value)
+  emits('update:modelValue', props.modelValue)
 })
 
 /******** Functions **********/
@@ -59,10 +54,6 @@ async function fetchItemTypes(): Promise<void> {
   const { data } = await http.get("/item/get/itemTypes")
   Object.assign(itemTypes, data)
 }
-
-// function updateValue() {
-//   emits('update:modelValue', props.modelValue)
-// }
 
 </script>
 

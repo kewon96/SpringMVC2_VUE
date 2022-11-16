@@ -16,7 +16,7 @@
 </template>
 
 <script setup lang="ts">
-import {nextTick, onMounted, reactive, ref, watch} from "vue";
+import {nextTick, onMounted, reactive, ref, watch, watchEffect} from "vue";
 import {http} from "@/core";
 import {ItemValid} from "@/views/item/validator/ItemValid";
 
@@ -33,7 +33,6 @@ const props = defineProps<{
   disabled: boolean
   title: string
   modelValue?: string
-  validFn?: (value?: string) => ItemValid
 }>()
 
 const emits = defineEmits<{
@@ -41,20 +40,13 @@ const emits = defineEmits<{
 }>()
 
 const deliveryCodes = reactive<DeliveryCode[]>([])
-const errMsg = ref<string>()
 
 
 /******** Hooks **********/
 
 onMounted(fetchDeliveryCodes)
-watch(() => props.modelValue, (value) => {
-  console.log(value)
-
-  nextTick(() => {
-    if(props.validFn) errMsg.value = props.validFn(value).errMsg
-  })
-
-  emits('update:modelValue', value)
+watchEffect(() => {
+  emits('update:modelValue', props.modelValue)
 })
 
 /******** Functions **********/

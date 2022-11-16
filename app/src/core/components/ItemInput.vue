@@ -1,20 +1,22 @@
 <template>
   <article class="input-area">
     <label>{{ title }}</label>
-    <input type="text" v-model="modelValue" :disabled="disabled" :placeholder="placeholder">
+    <input type="text"
+           v-model="modelValue"
+           :disabled="disabled"
+           :placeholder="placeholder
+    ">
 
     <ErrorMessage v-model="errMsg" v-if="errMsg" />
   </article>
 </template>
 
 <script setup lang="ts">
-import {nextTick, ref, watch} from "vue";
+import {nextTick, ref, watch, watchEffect} from "vue";
 import {ItemValid} from "@/views/item/validator/ItemValid";
 
 /******** Type & Interface **********/
 
-// Item Value타입들
-type ItemValue = Item[keyof Item]
 
 /******** Instance **********/
 
@@ -22,9 +24,8 @@ type ItemValue = Item[keyof Item]
 /******** Reactive Instance **********/
 
 const props = withDefaults(defineProps<{
-  modelValue: ItemValue
+  modelValue: string
   title: string
-  validFn?: (value: ItemValue) => ItemValid
   placeholder?: string
   disabled?: boolean
 }>(), {
@@ -39,14 +40,8 @@ const errMsg = ref<string>()
 
 /******** Hooks **********/
 
-watch(() => props.modelValue, (value) => {
-  console.log(value)
-
-  nextTick(() => {
-    if(props.validFn) errMsg.value = props.validFn(value).errMsg
-  })
-
-  emits('update:modelValue', value)
+watchEffect(() => {
+  emits('update:modelValue', props.modelValue)
 })
 
 /******** Functions **********/

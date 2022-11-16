@@ -33,7 +33,6 @@ const props = defineProps<{
   modelValue?: Array<string>
   title: string
   disabled: boolean
-  validFn?: (value?: Array<string>) => ItemValid
 }>()
 const emits = defineEmits<{
   ( e: 'update:modelValue', value: string[] ): void
@@ -66,8 +65,6 @@ function updateValue(event: Event) {
   } else {
     choiceRegion.value.splice(choiceRegion.value.indexOf(value), 1);
   }
-
-  if(props.validFn) errMsg.value = props.validFn(choiceRegion.value).errMsg
 
   emits("update:modelValue", choiceRegion.value);
 }

@@ -11,7 +11,6 @@
 </template>
 
 <script setup lang="ts">
-import {ItemValid} from "@/views/item/validator/ItemValid";
 
 /******** Type & Interface **********/
 
@@ -26,7 +25,6 @@ withDefaults(defineProps<{
   modelValue: boolean
   title: string
   name: string
-  validFn?: (value: boolean) => ItemValid
   disabled?: boolean
 }>(), {
   disabled: false
