@@ -12,8 +12,7 @@
 </template>
 
 <script setup lang="ts">
-import {nextTick, ref, watch, watchEffect} from "vue";
-import {ItemValid} from "@/views/item/validator/ItemValid";
+import {computed, nextTick, ref, watch, watchEffect} from "vue";
 
 /******** Type & Interface **********/
 
@@ -28,6 +27,8 @@ const props = withDefaults(defineProps<{
   title: string
   placeholder?: string
   disabled?: boolean
+  required?: boolean
+  validMap?: SpringValid
 }>(), {
   disabled: false
 })
@@ -42,6 +43,15 @@ const errMsg = ref<string>()
 
 watchEffect(() => {
   emits('update:modelValue', props.modelValue)
+})
+
+watch(() => props.modelValue, value => {
+  // itemValid.set('name', validUtil.setValidRequired(value, '상품명'))
+  props.validMap =
+})
+
+computed(() => {
+  errMsg.value = props.validMap?.msg
 })
 
 /******** Functions **********/

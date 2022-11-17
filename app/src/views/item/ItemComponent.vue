@@ -7,6 +7,8 @@
           title="상품명"
           :disabled="canEdit()"
           placeholder="상품명을 입력하세요"
+          :required="true"
+          :validMap="itemValid.get('name')"
       />
       <ItemInput
           title="가격"
@@ -72,10 +74,9 @@ import {
 } from "vue-router"
 import {reactive, watch} from "vue"
 import {http} from "@/core"
-import {useItemValid} from "@/views/item/validator/useItemValid";
-import {ItemValid} from "@/views/item/validator/ItemValid";
-import {useValidUtil} from "@/views/item/validator/useValidUtil";
-import {useValid} from "@/views/item/validator/useValid";
+import {useValid} from "@/views/item/validator/ItemValid";
+import {Item} from "@/types/Type";
+import {validUtil} from "@/views/item/validator/useValidUtil";
 
 /******** Type & Interface **********/
 
@@ -90,20 +91,18 @@ const route: ItemRoute = useRoute();
 const router: Router = useRouter();
 const { post, get } = http;
 const initItem = { open: false }
-const itemValid = useValid(['name', 'price', 'quantity'])
 
 /******** Reactive Instance **********/
 
 const item = reactive<Item>({...initItem})
+const itemValid = reactive<SpringValidMap<Item>>(useValid(['name', 'price', 'quantity']))
 
 /******** Normal Instance **********/
 
-const { setError, setSuccess } = useValidUtil
 
 /******** Hooks **********/
 
 onBeforeRouteUpdate(initLoad)
-// onMounted(initLoad)
 onBeforeRouteLeave((to, from, next) => {
   const onfulfilled = ({ data }: {data: string}) => {
     if(!data) return;
@@ -115,6 +114,10 @@ onBeforeRouteLeave((to, from, next) => {
   if(['ItemList', 'ItemEdit'].includes(to.name as string)) next();
   else if( to.name === 'ItemInfo' ) saveItem().then(onfulfilled);
 })
+
+// watch(() => item.name, value => {
+//   itemValid.set('name', validUtil.setValidRequired(value, '상품명'))
+// })
 
 
 
@@ -132,9 +135,9 @@ function fetchGetItem(id: string) {
   return get(`item/${id}`);
 }
 
-const validPriceQuantity = (price: number, quantity: number): ItemValid => {
-  return price * quantity > 10000 ? setSuccess() : setError('가격과 수량의 곱이 10,000은 넘어야합니다.')
-}
+// const validPriceQuantity = (price: number, quantity: number): ItemValid => {
+//   return price * quantity > 10000 ? setSuccess() : setError('가격과 수량의 곱이 10,000은 넘어야합니다.')
+// }
 
 /**
  * 수정할 수 있는지 확인
