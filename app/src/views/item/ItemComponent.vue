@@ -126,8 +126,7 @@ onBeforeRouteLeave((to, from, next) => {
 
 function initLoad() {
   const { name, params } = route;
-
-  // "상세보기"나 "수정"이면 아이템조회
+  
   name !== 'ItemAdd' && fetchGetItem(params.id as string).then(({ data })=> { Object.assign(item, data) });
 }
 
