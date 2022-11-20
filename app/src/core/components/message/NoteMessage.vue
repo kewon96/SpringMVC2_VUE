@@ -1,8 +1,6 @@
 <template>
   <div>
-    <router-link :to="to">
-      <slot></slot>
-    </router-link>
+    <p>{{ modelValue }}</p>
   </div>
 </template>
 
@@ -15,8 +13,9 @@
 
 
 /******** Reactive Instance **********/
+
 defineProps<{
-  to: string
+  modelValue?: string
 }>()
 
 /******** Hooks **********/
@@ -28,15 +27,10 @@ defineProps<{
 </script>
 
 <style scoped>
-
-a {
-  font-weight: 400;
-  padding: 0.5rem 1rem;
-  border-radius: 0.25rem;
-  text-decoration: none;
-  color: #fff;
-  background-color: #6c757d;
-  border-color: #6c757d;
+p {
+  margin: 0;
+  padding: 3px 5px;
+  color: #326e53;
+  font-size: 1rem;
 }
-
 </style>

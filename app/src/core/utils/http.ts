@@ -50,6 +50,8 @@ _axios.interceptors.response.use(
       return response;
     },
     (error) => {
+
+      console.log(error)
       const { config } = error;
       const originalRequest = config;
 
@@ -63,8 +65,12 @@ _axios.interceptors.response.use(
         delete currentExecutingRequests[originalRequest.url];
       }
 
+      alert('문제가 발생했습니다.')
+
       // here you could check expired token and refresh it if necessary
-      throw new _axios.Cancel(error.response.data?.message);
+      // throw new _axios.Cancel(error.response.data?.message);
+      throw new _axios.Cancel('test');
+      // return Promise.reject(error)
     }
 );
 

@@ -23,8 +23,9 @@ const routes: RouteRecordRaw[] = [
             },
             {
                 name: 'ItemEdit',
-                path: '/item/edit',
+                path: '/item/edit/:id',
                 component: () => import("@/views/item/ItemComponent.vue"),
+
             },
             {
                 name: 'ItemInfo',
@@ -40,7 +41,10 @@ const routes: RouteRecordRaw[] = [
             {
                 name: 'ItemCancel',
                 path: '/item/cancel',
-                redirect: 'home'
+                redirect: 'home',
+                beforeEnter() {
+                    console.log(1)
+                }
             }
         ]
     },

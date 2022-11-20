@@ -26,7 +26,6 @@
 import {onMounted, reactive} from "vue";
 import {http} from "@/core";
 import {Router, useRouter} from "vue-router";
-import {Item} from "@/views/item/type";
 import MoveButton from "@/core/components/button/MoveButton.vue";
 
 

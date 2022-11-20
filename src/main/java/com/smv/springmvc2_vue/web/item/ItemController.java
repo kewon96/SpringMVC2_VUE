@@ -1,10 +1,12 @@
-package com.smv.springmvc2_vue.web.form;
+package com.smv.springmvc2_vue.web.item;
 
-import com.smv.springmvc2_vue.item.DeliveryCode;
-import com.smv.springmvc2_vue.item.Item;
-import com.smv.springmvc2_vue.item.ItemRepository;
-import com.smv.springmvc2_vue.item.ItemType;
+import com.smv.springmvc2_vue.domain.item.*;
+import com.smv.springmvc2_vue.web.form.dto.ItemAddDto;
+import com.smv.springmvc2_vue.web.form.dto.ItemEditDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -15,9 +17,16 @@ import java.util.Map;
 @RestController
 @RequestMapping("/item")
 @RequiredArgsConstructor
-public class FormItemController {
+public class ItemController {
 
     private final ItemRepository itemRepository;
+    private final ItemValidator itemValidator;
+
+
+    @InitBinder({"itemAddDto", "itemEditDto"})
+    public void initBinder(WebDataBinder dataBinder) {
+        dataBinder.addValidators(itemValidator);
+    }
 
     @GetMapping("/list")
     public List<Item> items() {
@@ -30,15 +39,22 @@ public class FormItemController {
     }
 
     @PostMapping("/add")
-    public Long addItem(@RequestBody Item item) {
-        Item savedItem = itemRepository.save(item);
+    public Long addItem(@RequestBody @Validated ItemAddDto item, BindingResult bindingResult) {
 
-        return savedItem.getId();
+        if(bindingResult.hasErrors()) {
+            throw new RuntimeException(bindingResult.getAllErrors().get(0).getDefaultMessage());
+        }
+
+        return itemRepository.save(item.createItem()).getId();
     }
 
     @PostMapping("/edit")
-    public Long editItem(@RequestBody Item item) {
-        return itemRepository.update(item).getId();
+    public Long editItem(@RequestBody @Validated ItemEditDto item, BindingResult bindingResult) {
+        if(bindingResult.hasErrors()) {
+            throw new RuntimeException(bindingResult.getAllErrors().get(0).getDefaultMessage());
+        }
+
+        return itemRepository.update(item.createItem()).getId();
     }
 
     @GetMapping("/get/regions")

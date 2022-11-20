@@ -1,4 +1,4 @@
-package com.smv.springmvc2_vue.item;
+package com.smv.springmvc2_vue.domain.item;
 
 import lombok.*;
 
